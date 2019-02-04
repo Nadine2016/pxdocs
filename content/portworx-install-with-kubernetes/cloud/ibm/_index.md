@@ -19,7 +19,7 @@ Before you begin:
 - [Sign up for an IBM Cloud Pay-As-You-Go account](https://cloud.ibm.com/registration). With an IBM Cloud Pay-As-You-Go account you can access the IBM Cloud Platform-as-a-Service and Infrastructure-as-a-Service portfolio.
 - Learn about [IBM Cloud Kubernetes Service and the service benefits](https://cloud.ibm.com/docs/containers/cs_why.html#cs_ov).
 
-## Step 1: Choosing the right worker node flavor for your IBM Cloud Kubernetes Service cluster to support Portworx
+## Step 1: Choosing the right worker node flavor for your IBM Cloud Kubernetes Service cluster for Portworx
 
 Portworx is a highly available software-defined storage solution that you can use to manage persistent storage for your containerized databases or other stateful apps in your IBM Cloud Kubernetes Service cluster across multiple zones. To make sure that your cluster is set up with the compute resources that are required for Portworx, review the FAQs in this step.
 
@@ -52,9 +52,9 @@ To create or prepare your cluster for Portworx:
 
 Every Portworx cluster must be connected to a key-value store to store Portworx metadata. The Portworx key-value store serves as the single source of truth for your Portworx storage layer. If the key-value store is not available, then you cannot work with your Portworx cluster to access or store your data. Existing data is not changed or removed when the Portworx database is unavailable.
 
-In order for your Portworx cluster to be highly available, you must ensure that the Portworx key-value store is set up highly available. By using an IBM Cloud Database-as-a-Service, such as [IBM Compose for etcd for IBM Cloud](https://cloud.ibm.com/docs/services/ComposeForEtcd/getting_started.html#getting-started-tutorial) you can set up a highly available key-value store for your Portworx cluster. Each IBM Compose for etcd service instance contains three etcd data members that are added to a cluster. The etcd data members are spread across zones in an IBM Cloud location and data is replicated across all etcd data members.
+In order for your Portworx cluster to be highly available, you must ensure that the Portworx key-value store is set up highly available. By using an IBM Cloud Database-as-a-Service, such as [IBM Compose for etcd for IBM Cloud](https://cloud.ibm.com/docs/services/ComposeForEtcd/getting_started.html#getting-started-tutorial) or [Databases for etcd](https://cloud.ibm.com/docs/services/databases-for-etcd/getting-started.html#getting-started-tutorial) you can set up a highly available key-value store for your Portworx cluster. Each service instance contains three etcd data members that are added to a cluster. The etcd data members are spread across zones in an IBM Cloud location and data is replicated across all etcd data members.
 
-Follow the [IBM Cloud Kubernetes Service documentation](https://cloud.ibm.com/docs/containers/cs_storage_portworx.html#portworx_database) to set up your IBM Compose for etcd key-value store for Portworx.
+Follow the [IBM Cloud Kubernetes Service documentation](https://cloud.ibm.com/docs/containers/cs_storage_portworx.html#portworx_database) to set up your IBM Compose or Databases for etcd key-value store for Portworx.
 
 ## Step 4: Setting up encryption for your Portworx volumes
 

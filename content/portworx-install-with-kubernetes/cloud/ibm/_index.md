@@ -1,14 +1,12 @@
 ---
-title: IKS
+title: IBM Cloud Kubernetes Service
 logo: /logos/ibm.png
-linkTitle: IKS
+linkTitle: IBM Cloud Kubernetes Service
 weight: 5
-keywords: portworx, IBM, kubernetes, PaaS, IaaS, docker, converged, cloud
-description: Deploy Portworx on IBM IKS. See for yourself how easy it is!
+keywords: portworx, IBM, kubernetes, PaaS, IaaS, docker, converged, cloud, IKS
+description: Deploy Portworx on IBM Cloud Kubernetes Service. See for yourself how easy it is!
 noicon: true
 ---
-
-# IBM Cloud Kubernetes Service
 
 This guide shows how you can deploy Portworx on an [IBM Cloud Kubernetes Service](https://www.ibm.com/cloud/container-service) cluster.
 
@@ -17,54 +15,54 @@ This guide shows how you can deploy Portworx on an [IBM Cloud Kubernetes Service
 Before you begin:
 
 - [Sign up for an IBM Cloud Pay-As-You-Go account](https://cloud.ibm.com/registration). With an IBM Cloud Pay-As-You-Go account you can access the IBM Cloud Platform-as-a-Service and Infrastructure-as-a-Service portfolio.
-- Learn about [IBM Cloud Kubernetes Service and the service benefits](https://cloud.ibm.com/docs/containers/cs_why.html#cs_ov).
+- Learn about [IBM Cloud Kubernetes Service and the service benefits](https://cloud.ibm.com/docs/containers?topic=containers-cs_ov#cs_ov).
 
 ## Step 1: Choosing the right worker node flavor for your IBM Cloud Kubernetes Service cluster for Portworx
 
 Portworx is a highly available software-defined storage solution that you can use to manage persistent storage for your containerized databases or other stateful apps in your IBM Cloud Kubernetes Service cluster across multiple zones. To make sure that your cluster is set up with the compute resources that are required for Portworx, review the FAQs in this step.
 
 **What worker node flavor in IBM Cloud Kubernetes Service is the right one for Portworx?** </br>
-IBM Cloud Kubernetes Service provides [bare metal worker node flavors that are optimized for software-defined storage (SDS) usage](https://cloud.ibm.com/docs/containers/cs_clusters_planning.html#sds) and that come with one or more raw, unformatted, and unmounted local disks that you can use for your Portworx storage layer. Portworx offers best performance when you use SDS worker node machines that come with 10Gbps network speed.
+IBM Cloud Kubernetes Service provides [bare metal worker node flavors that are optimized for software-defined storage (SDS) usage](https://cloud.ibm.com/docs/containers?topic=containers-plan_clusters#sds) and that come with one or more raw, unformatted, and unmounted local disks that you can use for your Portworx storage layer. Portworx offers best performance when you use SDS worker node machines that come with 10Gbps network speed.
 
 **What if I want to run Portworx on non-SDS worker nodes?** </br>
-You can install Portworx on non-SDS worker node flavors, but you might not get the performance benefits that your app requires. Non-SDS worker nodes can be virtual or bare metal. If you want to use [virtual machines](https://cloud.ibm.com/docs/containers/cs_clusters_planning.html#vm), use a worker node flavor of `b2c.16x64` or better. Virtual machines with a flavor of `b2c.4x16` or `u2c.2x4` do not provide the required resources for Portworx to work properly. [Bare metal machines](https://cloud.ibm.com/docs/containers/cs_clusters_planning.html#bm) come with sufficient compute resources and network speed for Portworx. For more information about the compute resources that are required by Portworx, see the [minimum requirements](https://docs.portworx.com/start-here-installation/#installation-prerequisites).
+You can install Portworx on non-SDS worker node flavors, but you might not get the performance benefits that your app requires. Non-SDS worker nodes can be virtual or bare metal. If you want to use [virtual machines](https://cloud.ibm.com/docs/containers?topic=containers-plan_clusters#vm), use a worker node flavor of `b2c.16x64` or better. Virtual machines with a flavor of `b2c.4x16` or `u2c.2x4` do not provide the required resources for Portworx to work properly. [Bare metal machines](https://cloud.ibm.com/docs/containers?topic=containers-plan_clusters#bm) come with sufficient compute resources and network speed for Portworx. For more information about the compute resources that are required by Portworx, see the [minimum requirements](https://docs.portworx.com/start-here-installation/#installation-prerequisites).
 
-To add non-SDS worker nodes to the Portworx storage layer, each worker node must have at least one tertiary raw, unformatted, and unmounted disk that is attached to the worker node. You can manually add these tertiary disks or use the [IBM Cloud Block Attacher plug-in](https://cloud.ibm.com/docs/containers/cs_storage_utilities.html#block_storage_attacher) to automatically add the disks to your non-SDS worker nodes. For more information, see the [IBM Cloud Kubernetes Service documentation](https://cloud.ibm.com/docs/containers/cs_storage_portworx.html#create_block_storage).
+To add non-SDS worker nodes to the Portworx storage layer, each worker node must have at least one tertiary raw, unformatted, and unmounted disk that is attached to the worker node. You can manually add these tertiary disks or use the [IBM Cloud Block Attacher plug-in](https://cloud.ibm.com/docs/containers?topic=containers-utilities#block_storage_attacher) to automatically add the disks to your non-SDS worker nodes. For more information, see the [IBM Cloud Kubernetes Service documentation](https://cloud.ibm.com/docs/containers?topic=containers-portworx#create_block_storage).
 
 **How can I make sure that my data is stored highly available?** </br>
-You need at least 3 worker nodes in your Portworx cluster so that Portworx can replicate your data across nodes. By replicating your data across worker nodes, Portworx can ensure that your stateful app can be rescheduled to a different worker node in case of a failure without losing data. For even higher availability, use a [multizone cluster](https://cloud.ibm.com/docs/containers/cs_clusters_planning.html#multizone) and replicate your volumes on SDS worker nodes across 3 zones.
+You need at least 3 worker nodes in your Portworx cluster so that Portworx can replicate your data across nodes. By replicating your data across worker nodes, Portworx can ensure that your stateful app can be rescheduled to a different worker node in case of a failure without losing data. For even higher availability, use a [multizone cluster](https://cloud.ibm.com/docs/containers?topic=containers-plan_clusters#multizone) and replicate your volumes on SDS worker nodes across 3 zones.
 
 ## Step 2: Creating or preparing your cluster for Portworx
 
-To install Portworx, you must have an IBM Cloud Kubernetes Service cluster that runs Kubernetes version 1.10 or higher. To make sure that your cluster is set up with worker nodes that offer best performance for you Portworx cluster, review [Step 1](#worker-flavor).
+To install Portworx, you must have an IBM Cloud Kubernetes Service cluster that runs Kubernetes version 1.10 or higher. To make sure that your cluster is set up with worker nodes that offer best performance for you Portworx cluster, review Step 1: Choosing the right worker node flavor for your IBM Cloud Kubernetes Service cluster for Portworx.
 
 To create or prepare your cluster for Portworx:
 
-1. [Install the IBM Cloud CLI](https://cloud.ibm.com/docs/cli/index.html#overview) to create and manage your Kubernetes clusters in IBM Cloud Kubernetes Service. The IBM Cloud CLI includes the latest version of Docker, Helm, Git, and the `kubectl` CLI so that you do not need to install these packages separately.
+1. [Install the IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-ibmcloud-cli#overview) to create and manage your Kubernetes clusters in IBM Cloud Kubernetes Service. The IBM Cloud CLI includes the latest version of Docker, Helm, Git, and the `kubectl` CLI so that you do not need to install these packages separately.
 
-2. If you want to create a [multizone cluster](https://cloud.ibm.com/docs/containers/cs_clusters_planning.html#multizone) for high availability, enable [VLAN spanning](https://cloud.ibm.com/docs/infrastructure/vlans/vlan-spanning.html) for your IBM Cloud account.
+2. If you want to create a [multizone cluster](https://cloud.ibm.com/docs/containers?topic=containers-plan_clusters#multizone) for high availability, enable [VLAN spanning](https://cloud.ibm.com/docs/infrastructure/vlans?topic=vlans-vlan-spanning#vlan-spanning) for your IBM Cloud account.
 
-3. [Create or use an existing cluster](https://cloud.ibm.com/docs/containers/cs_clusters.html#clusters_ui) in IBM Cloud Kubernetes Service with a Kubernetes version of 1.10 or higher. To ensure high availability for your data, set up a [multizone cluster](https://cloud.ibm.com/docs/containers/cs_clusters_planning.html#multizone) with at least 3 worker nodes and spread the worker nodes across zones.
+3. [Create or use an existing cluster](https://cloud.ibm.com/docs/containers?topic=containers-clusters#clusters_ui) in IBM Cloud Kubernetes Service with a Kubernetes version of 1.10 or higher. To ensure high availability for your data, set up a [multizone cluster](https://cloud.ibm.com/docs/containers?topic=containers-plan_clusters#multizone) with at least 3 worker nodes and spread the worker nodes across zones.
 
-4. If you created or want to use a cluster with non-SDS worker nodes, [add raw, unformatted, and unmounted block storage](https://cloud.ibm.com/docs/containers/cs_storage_portworx.html#create_block_storage) to your worker nodes. The block storage devices are attached to your worker node and can be included in the Portworx storage layer.
+4. If you created or want to use a cluster with non-SDS worker nodes, [add raw, unformatted, and unmounted block storage](https://cloud.ibm.com/docs/containers?topic=containers-portworx#create_block_storage) to your worker nodes. The block storage devices are attached to your worker node and can be included in the Portworx storage layer.
 
 ## Step 3: Setting up a key-value store for the Portworx metadata
 
 Every Portworx cluster must be connected to a key-value store to store Portworx metadata. The Portworx key-value store serves as the single source of truth for your Portworx storage layer. If the key-value store is not available, then you cannot work with your Portworx cluster to access or store your data. Existing data is not changed or removed when the Portworx database is unavailable.
 
-In order for your Portworx cluster to be highly available, you must ensure that the Portworx key-value store is set up highly available. By using an IBM Cloud Database-as-a-Service, such as [IBM Compose for etcd for IBM Cloud](https://cloud.ibm.com/docs/services/ComposeForEtcd/getting_started.html#getting-started-tutorial) or [Databases for etcd](https://cloud.ibm.com/docs/services/databases-for-etcd/getting-started.html#getting-started-tutorial) you can set up a highly available key-value store for your Portworx cluster. Each service instance contains three etcd data members that are added to a cluster. The etcd data members are spread across zones in an IBM Cloud location and data is replicated across all etcd data members.
+In order for your Portworx cluster to be highly available, you must ensure that the Portworx key-value store is set up highly available. By using an IBM Cloud Database-as-a-Service, such as [IBM Compose for etcd for IBM Cloud](https://cloud.ibm.com/docs/services/ComposeForEtcd?topic=compose-for-etcd-getting-started-tutorial#getting-started-tutorial) or [Databases for etcd](https://cloud.ibm.com/docs/services/databases-for-etcd?topic=databases-for-etcd-getting-started#getting-started-tutorial) you can set up a highly available key-value store for your Portworx cluster. Each service instance contains three etcd data members that are added to a cluster. The etcd data members are spread across zones in an IBM Cloud location and data is replicated across all etcd data members.
 
-Follow the [IBM Cloud Kubernetes Service documentation](https://cloud.ibm.com/docs/containers/cs_storage_portworx.html#portworx_database) to set up your IBM Compose or Databases for etcd key-value store for Portworx.
+Follow the [IBM Cloud Kubernetes Service documentation](https://cloud.ibm.com/docs/containers?topic=containers-portworx#portworx_database) to set up your IBM Compose or Databases for etcd key-value store for Portworx.
 
 ## Step 4: Setting up encryption for your Portworx volumes
 
-By default, data that you store on a Portworx volume is not encrypted at rest or during transit. To protect your data from being accessed by unauthorized users, you can choose to protect your volumes with [IBM Key Protect](https://console.bluemix.net/docs/services/key-protect/about.html#about). IBM Key Protect helps you to provision encrypted keys that are secured by FIPS 140-2 Level 2 certified cloud-based hardware security modules (HSMs).
+By default, data that you store on a Portworx volume is not encrypted at rest or during transit. To protect your data from being accessed by unauthorized users, you can choose to protect your volumes with [IBM Key Protect](https://cloud.ibm.com/docs/services/key-protect?topic=key-protect-about#about). IBM Key Protect helps you to provision encrypted keys that are secured by FIPS 140-2 Level 2 certified cloud-based hardware security modules (HSMs).
 
 Review the following information in the IBM Cloud Kubernetes Service documentation:
 
-- [IBM Key Protect volume encryption flow](https://cloud.ibm.com/docs/containers/cs_storage_portworx.html#encryption)
-- [IBM Key Protect volume decryption flow](https://cloud.ibm.com/docs/containers/cs_storage_portworx.html#decryption)
-- [Setting up IBM Key Protect encryption for your volumes](https://cloud.ibm.com/docs/containers/cs_storage_portworx.html#setup_encryption)
+- [IBM Key Protect volume encryption flow](https://cloud.ibm.com/docs/containers?topic=containers-portworx#encryption)
+- [IBM Key Protect volume decryption flow](https://cloud.ibm.com/docs/containers?topic=containers-portworx#decryption)
+- [Setting up IBM Key Protect encryption for your volumes](https://cloud.ibm.com/docs/containers?topic=containers-portworx#setup_encryption)
 
 ## Step 5: Installing Portworx on IBM Cloud Kubernetes Service
 
@@ -72,11 +70,11 @@ Install Portworx version 1.7 with a Helm chart. The Helm chart deploys a trial v
 
 Before you begin:
 
-- Make sure that you [set up your Portworx database](#key-value-store) to store your Portworx cluster metadata.
-- Decide if you want to enable [Portworx volume encryption](#volume-encryption).
-- If you use non-SDS worker nodes, [add raw, unformatted, and unmounted block storage](https://cloud.ibm.com/docs/containers/cs_storage_portworx.html#create_block_storage) to your worker nodes.
+- Make sure that you set up your Portworx database to store your Portworx cluster metadata (Step 3).
+- Decide if you want to enable Portworx volume encryption (Step 4).
+- If you use non-SDS worker nodes, [add raw, unformatted, and unmounted block storage](https://cloud.ibm.com/docs/containers?topic=containers-portworx#create_block_storage) to your worker nodes.
 
-For more information about how to install the Portworx Helm chart, see the [IBM Cloud Kubernetes Service documentation](https://cloud.ibm.com/docs/containers/cs_storage_portworx.html#install_portworx).
+For more information about how to install the Portworx Helm chart, see the [IBM Cloud Kubernetes Service documentation](https://cloud.ibm.com/docs/containers?topic=containers-portworx#install_portworx).
 
 ## Step 6: Adding Portworx storage to your apps
 
@@ -87,7 +85,7 @@ Now that your Portworx cluster is all set, you can start creating Portworx volum
 - Number of data copies that you want to store across worker nodes
 - Sharing of volumes across pods
 
-For more information about how to create your own storage class and add Portworx storage to your app, see the [IBM Cloud Kubernetes Service documentation](https://cloud.ibm.com/docs/containers/cs_storage_portworx.html#add_portworx_storage). For an overview of supported configurations in a PVC, see [Using Dynamic Provisioning](https://docs.portworx.com/portworx-install-with-kubernetes/#using-dynamic-provisioning).
+For more information about how to create your own storage class and add Portworx storage to your app, see the [IBM Cloud Kubernetes Service documentation](https://cloud.ibm.com/docs/containers?topic=containers-portworx#add_portworx_storage). For an overview of supported configurations in a PVC, see [Using Dynamic Provisioning](https://docs.portworx.com/portworx-install-with-kubernetes/#using-dynamic-provisioning).
 
 ## What's next?
 Now that you set up Portworx on your IBM Cloud Kubernetes Service cluster, you can explore the following features:

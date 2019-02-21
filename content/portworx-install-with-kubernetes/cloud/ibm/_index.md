@@ -1,7 +1,7 @@
 ---
 title: IBM Cloud Kubernetes Service
 logo: /logos/ibm.png
-linkTitle: IBM Cloud Kubernetes Service
+linkTitle: IBM Cloud
 weight: 5
 keywords: portworx, IBM, kubernetes, PaaS, IaaS, docker, converged, cloud, IKS
 description: Deploy Portworx on IBM Cloud Kubernetes Service. See for yourself how easy it is!

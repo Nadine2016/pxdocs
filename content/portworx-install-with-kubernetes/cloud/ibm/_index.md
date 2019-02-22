@@ -1,5 +1,5 @@
 ---
-title: IBM Cloud Kubernetes Service
+title: IBM Cloud
 logo: /logos/ibm.png
 linkTitle: IBM Cloud
 weight: 5
@@ -38,7 +38,7 @@ To install Portworx, you must have an IBM Cloud Kubernetes Service cluster that 
 
 To create or prepare your cluster for Portworx:
 
-1. [Install the IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-ibmcloud-cli#overview) to create and manage your Kubernetes clusters in IBM Cloud Kubernetes Service. The IBM Cloud CLI includes the latest version of Docker, Helm, Git, and the `kubectl` CLI so that you do not need to install these packages separately.
+1. [Install the IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-ibmcloud-cli#ibmcloud-cli) to create and manage your Kubernetes clusters in IBM Cloud Kubernetes Service. The IBM Cloud CLI includes the latest version of Docker, Helm, Git, and the `kubectl` CLI so that you do not need to install these packages separately.
 
 2. If you want to create a [multizone cluster](https://cloud.ibm.com/docs/containers?topic=containers-plan_clusters#multizone) for high availability, enable [VLAN spanning](https://cloud.ibm.com/docs/infrastructure/vlans?topic=vlans-vlan-spanning#vlan-spanning) for your IBM Cloud account.
 

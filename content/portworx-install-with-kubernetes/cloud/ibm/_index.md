@@ -64,7 +64,7 @@ Review the following information in the IBM Cloud Kubernetes Service documentati
 
 ## Step 5: Install Portworx in your cluster
 
-Install Portworx with a Helm chart. The Helm chart deploys a trial version of the Portworx enterprise edition `px-enterprise` that you can use for 30 days. After the trial version expires, you must [purchase a Portworx license](/reference/knowledge-base/px-licensing/) to continue to use your Portworx cluster. In addition, Stork is installed on your Kubernetes cluster. Stork is the Portworx storage scheduler and allows you to co-locate pods with their data, and create and restore snapshots of Portworx volumes.
+Provision a Portworx service instance from the IBM Cloud catalog. After you create the service instance, the latest Portworx enterprise edition (`px-enterprise`) is installed on your cluster by using Helm. The installation includes a Portworx license. Make sure to review the costs for the license in the IBM Cloud catalog. 
 
 Before you begin:
 
@@ -72,11 +72,11 @@ Before you begin:
 - Decide if you want to enable Portworx volume encryption (Step 4).
 - If you use non-SDS worker nodes, [add raw, unformatted, and unmounted block storage](https://cloud.ibm.com/docs/containers?topic=containers-portworx#create_block_storage) to your worker nodes.
 
-For more information about how to install the Portworx Helm chart, see the [IBM Cloud Kubernetes Service](https://cloud.ibm.com/docs/containers?topic=containers-portworx#install_portworx) or [Red Hat OpenShift on IBM Cloud ](https://cloud.ibm.com/docs/openshift?topic=openshift-portworx#install_portworx) documentation.
+For more information about how to install the Portworx, see the [IBM Cloud Kubernetes Service](https://cloud.ibm.com/docs/containers?topic=containers-portworx#install_portworx) or [Red Hat OpenShift on IBM Cloud ](https://cloud.ibm.com/docs/openshift?topic=openshift-portworx#install_portworx) documentation.
 
 ## Step 6: Add Portworx storage to your apps
 
-Now that your Portworx cluster is all set, you can start creating Portworx volumes by using [Kubernetes dynamic provisioning](https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/). The Portworx Helm chart already set up a few default storage classes in your cluster that you can see by running the `kubectl get storageclasses | grep portworx` command. You can also create your own storage class to define settings, such as:
+Now that your Portworx cluster is all set, you can start creating Portworx volumes by using [Kubernetes dynamic provisioning](https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/). The Portworx installation already set up a few default storage classes in your cluster that you can see by running the `kubectl get storageclasses | grep portworx` command. You can also create your own storage class to define settings, such as:
 
 - Encryption for a volume
 - IO priority of the disk where you want to store the data
